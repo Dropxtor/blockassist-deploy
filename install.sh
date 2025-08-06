@@ -54,7 +54,30 @@ pip install torch torchvision torchaudio --index-url https://download.pytorch.or
 # === Install app deps ===
 log "Installing requirements..."
 pip install -r "$APP_DIR/requirements.txt"
-
+if [ ! -f "$APP_DIR/requirements.txt" ]; then
+    echo "⚠️  requirements.txt not found. Creating default..."
+    cat > "$APP_DIR/requirements.txt" << 'EOF'
+streamlit
+numpy
+pillow
+torch
+torchaudio
+torchvision
+einops
+tqdm
+plotly
+matplotlib
+pandas
+scikit-learn
+transformers
+accelerate
+fsspec
+typing-extensions
+jinja2
+networkx
+setuptools
+EOF
+fi
 # === Start in tmux ===
 tmux kill-session -t blockassist 2>/dev/null || true
 tmux new-session -d -s blockassist "cd $APP_DIR && source $VENV_DIR/bin/activate && streamlit run app.py --server.port=$PORT --server.address=0.0.0.0"
